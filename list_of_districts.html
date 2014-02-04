@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+<script>
+$(document).ready(function(){
+  $("button").click(function(){
+    $.getJSON("https://spreadsheets.google.com/feeds/worksheets/0Aohzi8M76M4edEdTN0FGR3R6NTFGM2Q0SlN4ai1NRGc/public/basic?alt=json",function(result){
+      $.each(result.feed.entry, function(i, field){
+        $("div").append("<p><a href=" + field.link[2].href + ">" + field.title.$t + "</a></p> ");
+      });
+    });
+  });
+});
+</script>
+</head>
+<body>
+
+<button>Get JSON data</button>
+<div></div>
+
+</body>
+</html>
