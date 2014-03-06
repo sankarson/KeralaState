@@ -1,0 +1,136 @@
+html {
+  width: 100%;
+  height: 100%;
+  font-family: 'Open Sans', Helvetica, sans-serif;
+  font-weight: lighter;
+  background-color: #ffffcc;
+}
+
+table {
+  width: 100%;
+}
+tr:hover {
+  background-color: #ffffcc;
+}
+td {
+  padding: 0;
+  height: 100%;
+  vertical-align: top;
+  border-top: thin dotted #c0c0c0;
+}
+.ui-widget {
+  font-size: .65em;
+}
+#count {
+  float: right;
+  clear: none;
+  width: 90px;
+  text-align: center;
+  font-size: xx-large;
+  letter-spacing: -1px;
+  text-shadow: 1px 1px 3px #cccccc;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  background-color: white;
+  border: thin solid #808080;
+}
+#countbox {
+  padding: 4px 4px 0 0;
+  vertical-align: top;
+  line-height: 24px;
+}
+#countline {
+  font-size: small;
+  color: #c0c0c0;
+  text-shadow: 0 0 0;
+  padding: 0 4px 4px 0;
+}
+#contentbox {
+  height: 75%;
+  overflow: auto;
+  padding: 2px;
+  min-height: 200px;
+  margin-bottom: 5px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  background-color: white;
+  border: thin solid #ffa500;
+}
+#headerbox {
+  width: 320px;
+  letter-spacing: -2px;
+  text-shadow: 1px 1px 3px #cccccc;
+}
+#dateform {
+  display: inline;
+  margin-top: 10px;
+  margin-left: 5px;
+  float: left;
+}
+select {
+  font-size: large;
+  font-weight: 300;
+  width: 100%;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  background-color: white;
+  border: thin solid #808080;
+}
+#formbox {
+  width: 100%;
+  float: left;
+  clear: left;
+  margin-bottom: 5px;
+}
+@media screen and (max-width: 480px) {
+  body {
+    width: 95%;
+    height: 350px;
+    margin: 2px auto;
+    -webkit-text-size-adjust: auto;
+  }
+  #tip {
+    display: none;
+  }
+  #logo {
+    display: none;
+  }
+}
+@media screen and (min-width: 481px) {
+  body {
+    width: 95%;
+    height: 100%;
+    margin: 10px auto;
+    -webkit-text-size-adjust: none;
+/*    min-height: 416px;*/
+  }
+  #tip {
+    font-weight: bold;
+    display: inline;
+    float: left;
+  }
+  #logo {
+    float: right;
+    clear: right;
+    background-image: url("/images/chat/logo.png");
+    width: 154px;
+    height: 47px;
+    margin-left: 5px;
+  }
+  #contentbox {
+  height: 55%;
+  overflow: auto;
+  padding: 2px;
+  min-height: 200px;
+  margin-bottom: 5px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  background-color: white;
+  border: thin solid #ffa500;
+}
+
+}

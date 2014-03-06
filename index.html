@@ -1,29 +1,199 @@
 <!doctype html>
 <html ng-app>
-    <head>
-        <title>Test</title>
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<head>
+		<title>Akshaya E-Centre</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href='http://fonts.googleapis.com/css?family=Open Sans:300,400, 800' rel='stylesheet' type='text/css'>
+		<link href='css/kerala.css' rel='stylesheet' type='text/css'>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+		<script src="js/tabletop.js"></script>
+		<script>
+			$(document).ready(function()
+			{
+				var key = '0Aohzi8M76M4edEdTN0FGR3R6NTFGM2Q0SlN4ai1NRGc';
+				//var locations=[];
 
-    </head>
-    <body> 
-        <h1>Hello, World</h1>
-        <select class="form-control" ng-model="district" name="District">
-            <option value="od1">Thiruvananthapuram</option>
-            <option value="od2">Kollam</option>
-            <option value="od3">Pathanamthitta</option>
-            <option value="od4">Alappuzha</option>
-            <option value="od5">Kottayam</option>
-            <option value="od6">Eranakulam</option>
-            <option value="od7">Idukki</option>
-            <option value="od8">Thrissur</option>
-            <option value="od9">Palakkad</option>
-            <option value="od10">Malappuram</option>
-            <option value="od11">Kozhikode</option>
-            <option value="od12">Wayanad</option>
-            <option value="od13">Kannur</option>
-            <option value="od3">Kasargod</option>
-        </select>
-        You have selected {{district}}
-    </body>
+
+				$("#xxx").hide();
+				Tabletop.init( { key: key,
+								callback: fetchSheets,
+								simpleSheet: false } );
+
+				function fetchSheets(data, tabletop)
+				{
+					worksheet = tabletop;
+					fetchBlocks();
+					fetchPanchayaths();
+					fetchLocations();
+					$("#loading").hide();
+					$("#xxx").show("Drop");
+				}
+
+				function fetchBlocks()
+				{
+					thisSheet = worksheet.sheets($("#district").val());
+					blockList = [];
+					$('#block').empty();
+
+					if (thisSheet.column_names[2]=="blockmunicipalitycorporation")
+						blockColumn = "blockmunicipalitycorporation";
+					else
+						(blockColumn = "block");
+
+					$.each(thisSheet.elements, function(i, item){
+						if (blockList.indexOf(item[blockColumn]) == -1)
+						{
+							blockList.push(item[blockColumn]);
+							$('#block').append( new Option(item[blockColumn]));
+						}
+					})
+					return blockList[0];
+				}
+
+				function fetchPanchayaths()
+				{
+					thisSheet = worksheet.sheets($("#district").val());
+					block = $("#block").val();
+					blockList = [];
+					$('#panchayath').empty();
+
+					if (thisSheet.column_names[2]=="blockmunicipalitycorporation")
+					{
+						blockColumn = "blockmunicipalitycorporation";
+						lsgiColumn = "panchayath";
+					}
+					else
+					{
+						blockColumn = "block";
+						lsgiColumn = "lsgi";
+					}
+
+					$.each(thisSheet.elements, function(i, item)
+					{
+						if ((item[blockColumn] == block) && (blockList.indexOf(item[lsgiColumn]) == -1))
+						{
+							blockList.push(item[lsgiColumn]);
+							$('#panchayath').append( new Option(item[lsgiColumn]));
+						}
+					})
+					return blockList[0];
+				}
+
+				function fetchLocations()
+				{
+					thisSheet = worksheet.sheets($("#district").val());
+					block = $("#block").val();
+					panchayath = $("#panchayath").val();
+
+					blockList = [];
+
+					if (thisSheet.column_names[2]=="blockmunicipalitycorporation")
+					{
+						blockColumn = "blockmunicipalitycorporation";
+						lsgiColumn = "panchayath";
+						locationColumn = "locationaspergo";
+					}
+					else
+					{
+						blockColumn = "block";
+						lsgiColumn = "lsgi";
+						locationColumn = "presentlocation";
+					}
+					$("#rrr").empty();
+
+					$.each(thisSheet.elements, function(i, item)
+					{
+						if ((item[blockColumn] == block) && (item[lsgiColumn] == panchayath))
+						{
+							blockList.push(
+								{
+									"cscid" : item.cscid,
+									"address" : item.addressofakshayacentre,
+									"location" : item[locationColumn],
+									"contact" : item.entrepreneur,
+									"email" : item["email-id"], 
+								}
+							);
+							$("#rrr").append(
+								"<p><b>" + 
+								item.cscid +
+								"</b><br>" +
+								item.addressofakshayacentre +
+								"<br>" +
+								item[locationColumn] +
+								"<br>" +
+								item.entrepreneur +
+								"<br>" +
+								item["email-id"] +
+								"</p><hr>"
+								);
+						}
+					})
+					console.log(blockList);
+					$("#lll").html(blockList.length+" locations found");
+					return blockList;
+				}
+
+				$("#district").change(function()
+				{
+					$("#block").empty();
+					fetchBlocks();
+					fetchPanchayaths();
+				});
+
+				$("#block").change(function()
+				{
+					$("#panchayath").empty();
+					fetchPanchayaths();
+				});
+
+				$("#panchayath").change(function()
+				{
+					fetchLocations();
+				});
+
+
+			});
+		</script>
+	</head>
+	<body>
+		<div id="headerbox"> 
+		    <img src="images/logo-full.png" width=260px>
+			<hr>
+		</div>
+		<div id="loading">Loading data, please wait...</div>
+		<div id="xxx">
+			Select a district<br>
+			<select class="form-control" id="district" name="dst">
+				<option>Thiruvananthapuram</option>
+				<option>Kollam</option>
+				<option>Pathanamthitta</option>
+				<option>Alappuzha</option>
+				<option>Kottayam</option>
+				<option>Eranakulam</option>
+				<option>Idukki</option>
+				<option>Thrissur</option>
+				<option>Palakkad</option>
+				<option>Malappuram</option>
+				<option>Kozhikode</option>
+				<option>Wayanad</option>
+				<option>Kannur</option>
+				<option>Kasargod</option>
+			</select>
+			<p>
+				then select a block or municipality<br>
+				<select id="block"></select>
+			</p>
+			<p>
+				finally, select a panchayath<br>
+				<select id="panchayath"></select>
+			</p>
+			<p id="lll">
+			</p>
+			<div id="rrr">Test
+			</div>
+		</div>
+	</body>
 </html>
